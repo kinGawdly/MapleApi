@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Quests } from 'src/quests/entity/quests.entity';
+import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('maple_events')
 export class MapleEvents {
@@ -25,4 +26,7 @@ export class MapleEvents {
 
   @Column({ name: 'rewards' })
   rewards: string;
+
+  @ManyToMany(() => Quests, (m) => m.maple_events)
+  quests: Quests[];
 }

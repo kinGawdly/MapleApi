@@ -1,4 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Quests } from 'src/quests/entity/quests.entity';
+import { Users } from 'src/users/entity/users.entity';
+import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('bosses')
 export class Bosses {
@@ -25,4 +27,10 @@ export class Bosses {
 
   @Column({ name: 'drops' })
   drops: string;
+
+  @ManyToMany(() => Users, (u) => u.bosses)
+  users: Users[];
+
+  @ManyToMany(() => Quests, (q) => q.bosses)
+  quests: Quests[];
 }

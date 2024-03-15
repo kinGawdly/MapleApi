@@ -1,4 +1,12 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Bosses } from 'src/bosses/entity/bosses.entity';
+import { Quests } from 'src/quests/entity/quests.entity';
+import {
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity('users')
 export class Users {
@@ -7,13 +15,19 @@ export class Users {
   @Column({ name: 'username' }) // Para indicar que el nombre de la columna es el mismo nombre del atributo
   username: string;
 
-  /*@ManyToMany(() => Bosses)
-  @JoinTable({ name: "User_Bosses" })
+  @ManyToMany(() => Bosses)
+  @JoinTable({
+    name: 'user_bosses',
+    joinColumn: { name: 'user_id' },
+    inverseJoinColumn: { name: 'boss_id' },
+  })
   bosses: Bosses[];
-  */
 
-  /*@ManyToMany(() => Quests)
-  @JoinTable({ name: "User_Quests" })
+  @ManyToMany(() => Quests)
+  @JoinTable({
+    name: 'user_quests',
+    joinColumn: { name: 'user_id' },
+    inverseJoinColumn: { name: 'quest_id' },
+  })
   quests: Quests[];
-  */
 }
