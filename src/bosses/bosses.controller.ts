@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Param } from '@nestjs/common';
 import { BossesService } from './bosses.service';
 import { BossesDto } from './dto/bosses.dto';
 
@@ -9,5 +9,10 @@ export class BossesController {
   @Get()
   async getAllBosses(): Promise<BossesDto[]> {
     return await this.bossesService.getAllBosses();
+  }
+
+  @Get(':id')
+  async getBossesById(@Param('id') id: number): Promise<BossesDto> {
+    return await this.bossesService.getBossesById(id);
   }
 }
