@@ -1,14 +1,18 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import * as Crypto from 'crypto';
 import { Repository } from 'typeorm';
 import { CreateUsersDto } from './dto/create-users.dto';
 import { LoginDto } from './dto/login.dto';
 import { UsersDto } from './dto/users.dto';
 import { Users } from './entity/users.entity';
 import { UsersMapper } from './mapper/users.mapper';
-
 @Injectable()
 export class UsersService {
+  textoOriginal = 'EJEMPLO';
+  password = 'Password used to generate key';
+  modo = 'AES-256-CBC';
+
   constructor(
     @InjectRepository(Users)
     private usersRepository: Repository<Users>,
@@ -39,9 +43,24 @@ export class UsersService {
         username: createUsers.username,
       },
     });
+
     if (searchUser) {
       throw Error();
     }
+    const iv = Crypto.randomBytes(16);
+    const cipher = Crypto.createCipheriv(
+      this.modo,
+      Buffer.from(this.password),
+      iv,
+    );
+
+    const textoEncriptado = Buffer.concat([
+      cipher.update(entity.password),
+      cipher.final(),
+    ]);
+
+    entity.password = textoEncriptado.toString('hex');
+
     const result: Users = await this.usersRepository.save(entity);
     return UsersMapper.toDto(result);
   }
@@ -55,6 +74,18 @@ export class UsersService {
     if (!searchUser) {
       throw Error();
     }
+    let iv; // EL MISMO UTILIZADO PARA ENCRIPTA
+    const decipher = Crypto.createDecipheriv(
+      this.modo,
+      Buffer.from(this.password),
+      iv,
+    );
+
+    const decrypted = Buffer.concat([
+      decipher.update(textoEncriptado),
+      decipher.final(),
+    ]);
+    const textoOriginal = decrypted.toString();
   }
 
   async remove(id: number): Promise<UsersDto> {

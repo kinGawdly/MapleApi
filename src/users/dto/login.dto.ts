@@ -6,8 +6,7 @@ export class LoginDto {
   @IsString()
   readonly username: string;
 
-  /* @ApiProperty()
+  @ApiProperty()
   @IsString()
   readonly password: string;
-  */
 }

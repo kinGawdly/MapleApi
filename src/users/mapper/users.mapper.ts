@@ -7,6 +7,7 @@ export class UsersMapper {
     const dto = new UsersDto();
     dto.id = entidad.id;
     dto.username = entidad.username;
+    dto.password = entidad.password;
 
     return dto;
   }
@@ -19,6 +20,7 @@ export class UsersMapper {
     const entidad = new Users();
 
     entidad.username = dto.username;
+    entidad.password = dto.password;
 
     return entidad;
   }

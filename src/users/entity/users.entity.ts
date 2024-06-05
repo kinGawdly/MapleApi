@@ -14,6 +14,8 @@ export class Users {
   id: number;
   @Column({ name: 'username' }) // Para indicar que el nombre de la columna es el mismo nombre del atributo
   username: string;
+  @Column({ name: 'password' })
+  password: string;
 
   @ManyToMany(() => Bosses)
   @JoinTable({
